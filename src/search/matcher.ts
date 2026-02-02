@@ -36,12 +36,13 @@ export function countLetters(input: string): { counts: Map<string, number>; wild
 /**
  * Check if a word can be formed from the available letters.
  * Wildcards can substitute for any letter.
+ * Returns false if the word cannot be formed, or the number of wildcards used.
  */
 export function canFormWord(
   word: string,
   availableCounts: Map<string, number>,
   wildcards: number
-): boolean {
+): number | false {
   // Count letters needed for the word
   const needed = new Map<string, number>();
   for (const ch of word) {
@@ -61,5 +62,5 @@ export function canFormWord(
     }
   }
 
-  return true;
+  return wildcardsUsed;
 }
