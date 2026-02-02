@@ -1,11 +1,27 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useSearch } from './hooks/useSearch';
 import { SearchInput } from './components/SearchInput';
 import { ResultsList } from './components/ResultsList';
 
+const STORAGE_KEY = 'scrabble-letters';
+
 export default function App() {
-  const [input, setInput] = useState('');
+  const [input, setInput] = useState(() => {
+    try {
+      return localStorage.getItem(STORAGE_KEY) || '';
+    } catch {
+      return '';
+    }
+  });
   const { validation, response, isSearching } = useSearch(input);
+
+  useEffect(() => {
+    try {
+      localStorage.setItem(STORAGE_KEY, input);
+    } catch {
+      // Ignore localStorage errors (e.g., if disabled or quota exceeded)
+    }
+  }, [input]);
 
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col items-center pt-12 px-4 pb-8">
