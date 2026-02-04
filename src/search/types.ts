@@ -8,6 +8,8 @@ export interface ScoredWord {
 export interface SearchRequest {
   pattern: string;
   searchId: number;
+  startsWith?: string;
+  endsWith?: string;
 }
 
 /** The payload received FROM the search worker. */

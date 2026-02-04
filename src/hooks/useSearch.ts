@@ -3,7 +3,7 @@ import type { SearchResponse, InputValidation } from '../search/types';
 import { validatePattern } from '../search/matcher';
 import SearchWorker from '../search/searchWorker.ts?worker';
 
-export function useSearch(rawInput: string) {
+export function useSearch(rawInput: string, startsWith: string = '', endsWith: string = '') {
   const [validation, setValidation] = useState<InputValidation>({ valid: false, reason: '' });
   const [response, setResponse] = useState<SearchResponse | null>(null);
   const [isSearching, setIsSearching] = useState(false);
@@ -53,13 +53,15 @@ export function useSearch(rawInput: string) {
       workerRef.current?.postMessage({
         pattern: rawInput.trim(),
         searchId: searchIdRef.current,
+        startsWith: startsWith.trim(),
+        endsWith: endsWith.trim(),
       });
     }, 150);
 
     return () => {
       if (timerRef.current) clearTimeout(timerRef.current);
     };
-  }, [rawInput]);
+  }, [rawInput, startsWith, endsWith]);
 
   return { validation, response, isSearching };
 }
